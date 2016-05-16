@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="Scripts/jquery-2.2.3.min.js"></script>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <button id="btnlogin">Login Ol</button>
+    <button id="btnninja">Ninjaları Getir</button>
+</body>
+</html>
+<script>
+    var accessToken = "";
+    $("#btnlogin").click(function () {
+
+        var User = new Object();
+        User.grant_type = "password"
+        User.UserName = "cagatay";
+        User.Password = "123";
+
+        $.ajax({
+            url: "http://localhost:61376/token",
+            type: "POST",
+            dataType: "json",
+            data: User,
+            success: function (result) {
+                accessToken = result.access_token;
+                console.log(result);
+            }
+            
+        })
+    })
+
+    $("#btnninja").click(function () {
+        alert(accessToken)
+        $.ajax({
+            url: "http://localhost:61376/api/ninja",
+            beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken); },
+            type: "GET",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+            }
+
+        })
+
+    })
+</script>
